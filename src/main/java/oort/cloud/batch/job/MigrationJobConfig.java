@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
-public class MigrationJob {
+public class MigrationJobConfig {
 
     @Bean
     public Job migrationJob(JobRepository jobRepository, Step masterMigrationStep, Step slaveMigrationStep){
@@ -32,11 +32,11 @@ public class MigrationJob {
                 .tasklet(new Tasklet() {
                     @Override
                     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-                        String dataBases = dao.getDataBases();
-                        System.out.println(dataBases);
+                        String dataBases = dao.getDataBase();
+                        System.out.println("Migration MasterDataBase Name : " + dataBases);
                         return RepeatStatus.FINISHED;
                     }
-                }, ptm)
+                }, ptm).allowStartIfComplete(true)
                 .build();
     }
 
@@ -46,11 +46,11 @@ public class MigrationJob {
                 .tasklet(new Tasklet() {
                     @Override
                     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-                        String dataBases = dao.getDataBases();
-                        System.out.println(dataBases);
+                        String dataBases = dao.getDataBase();
+                        System.out.println("Migration SlaveDataBase Name : " + dataBases);
                         return RepeatStatus.FINISHED;
                     }
-                }, ptm)
+                }, ptm).allowStartIfComplete(true)
                 .build();
     }
 }

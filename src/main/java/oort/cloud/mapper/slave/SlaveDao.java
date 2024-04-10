@@ -1,8 +1,8 @@
-package oort.cloud.mapper.master;
+package oort.cloud.mapper.slave;
 
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface MasterDao {
-    public void getDataBases();
+public interface SlaveDao {
+    String getDataBase();
 }
